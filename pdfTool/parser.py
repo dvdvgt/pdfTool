@@ -2,13 +2,13 @@ import argparse
 from . import pdfUtils
 
 def main():
+    # Top level parser
     PARSER = argparse.ArgumentParser(description="PDF command-line tool")
     SUBPARSER = PARSER.add_subparsers(
-        title="Sub-commands",
+        title="Commands",
         dest="command",
         metavar="<command>"
     )
-
     #
     # Join
     #
@@ -18,7 +18,6 @@ def main():
     )
     JOIN_PARSER.add_argument("infile", type=argparse.FileType("rb"), nargs="+", help="Input files to be joined seperated by spaces.")
     JOIN_PARSER.add_argument("outfile", type=argparse.FileType("wb"), help="Name of the output file.")
-
     #
     # Extract
     #
@@ -43,7 +42,7 @@ def main():
     #
     if ARGS.command == "join":
         pdfUtils.join(ARGS.infile, ARGS.outfile)
-    elif ARGS.command == "copy":
+    elif ARGS.command == "extract":
         print(arg_range(ARGS.pages))
         pdfUtils.extract(ARGS.infile, ARGS.outfile, arg_range(ARGS.pages))
 
@@ -57,4 +56,9 @@ def arg_range(nums : list) -> list:
                 out.append(i)
         else:
             out.append(int(num))
+    # Subtract one from every number since pyPDF starts counting at 0
+    out = list(map(lambda x: x-1, out))
     return out
+
+if __name__ == "__main__":
+    main()

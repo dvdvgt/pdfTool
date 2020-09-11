@@ -27,6 +27,3 @@ def extract(input_file, output_file, pages: list):
         writer.write(output_file)
     finally:
         input_file.close()
-
-if __name__ == "__main__":
-    parser.main()
