@@ -43,12 +43,32 @@ def main():
     if ARGS.command == "join":
         pdfUtils.join(ARGS.infile, ARGS.outfile)
     elif ARGS.command == "extract":
-        print(arg_range(ARGS.pages))
-        pdfUtils.extract(ARGS.infile, ARGS.outfile, arg_range(ARGS.pages))
+        pages: list = arg_range(ARGS.pages)
+        # Subtract one from every number since pyPDF starts counting pages at 0
+        pages = list(map(lambda x: x-1, pages))
+        pdfUtils.extract(
+            ARGS.infile,
+            ARGS.outfile,
+            arg_range(ARGS.pages)
+        )
+
 
 def arg_range(nums : list) -> list:
+    """
+    Parameters
+    ----------
+    nums: list
+        List of strings to convert to a list of integers.
+        Elements may have the format "1-10" (representing a range of integer) 
+        or "5" (representing a single integer).
+    
+    Returns
+    -------
+    list
+        List of interges.
+    """
+    # Convert list of strings to list of integers.
     out = []
-
     for num in nums:
         if "-" in num:
             start, end = map(int, num.split("-"))
@@ -56,8 +76,6 @@ def arg_range(nums : list) -> list:
                 out.append(i)
         else:
             out.append(int(num))
-    # Subtract one from every number since pyPDF starts counting at 0
-    out = list(map(lambda x: x-1, out))
     return out
 
 if __name__ == "__main__":
